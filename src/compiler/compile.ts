@@ -1,7 +1,7 @@
-const {IRGenerator} = require('./irgen');
-const JSGenerator = require('./jsgen');
+import { IRGenerator } from "./irgen.ts";
+import JSGenerator from './jsgen.ts';
 
-const compile = thread => {
+export const compile = thread => {
     const irGenerator = new IRGenerator(thread);
     const ir = irGenerator.generate();
 
@@ -33,5 +33,3 @@ const compile = thread => {
         executableHat: ir.entry.executableHat
     };
 };
-
-module.exports = compile;

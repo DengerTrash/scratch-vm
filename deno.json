@@ -11,7 +11,7 @@
   },
   "main": "./src/index.js",
   "browser": "./src/index.js",
-  "scripts": {
+  "tasks": {
     "build": "webpack --progress --colors --bail",
     "coverage": "tap ./test/{unit,integration}/*.js --coverage --coverage-report=lcov",
     "docs": "jsdoc -c .jsdoc.json",

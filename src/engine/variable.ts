@@ -3,10 +3,15 @@
  * Object representing a Scratch variable.
  */
 
-const uid = require('../util/uid');
-const xmlEscape = require('../util/xml-escape');
+import uid from '../util/uid.ts';
+import xmlEscape from '../util/xml-escape.ts';
 
-class Variable {
+export default class Variable {
+    id: any;
+    name: string;
+    type: string;
+    isCloud: boolean;
+    value: any;
     /**
      * @param {string} id Id of the variable.
      * @param {string} name Name of the variable.
@@ -14,7 +19,7 @@ class Variable {
      * @param {boolean} isCloud Whether the variable is stored in the cloud.
      * @constructor
      */
-    constructor (id, name, type, isCloud) {
+    constructor (id: string, name: string, type: string, isCloud: boolean) {
         this.id = id || uid();
         this.name = name;
         this.type = type;
@@ -66,5 +71,3 @@ class Variable {
         return 'broadcast_msg';
     }
 }
-
-module.exports = Variable;

@@ -5,7 +5,7 @@
 
 // Please keep these lists alphabetical.
 
-const stacked = [
+export const stacked = [
     'looks_changestretchby',
     'looks_hideallsprites',
     'looks_say',
@@ -33,7 +33,7 @@ const stacked = [
     'sound_stopallsounds'
 ];
 
-const inputs = [
+export const inputs = [
     'motion_xscroll',
     'motion_yscroll',
     'sensing_loud',
@@ -41,8 +41,3 @@ const inputs = [
     'sensing_userid',
     'sound_volume'
 ];
-
-module.exports = {
-    stacked,
-    inputs
-};

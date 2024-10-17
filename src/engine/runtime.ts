@@ -1,40 +1,40 @@
-const EventEmitter = require('events');
-const {OrderedMap} = require('immutable');
-const ExtendedJSON = require('@turbowarp/json');
-const uuid = require('uuid');
+import EventEmitter from 'events';
+import {OrderedMap} from 'immutable';
+import ExtendedJSON from '@turbowarp/json';
+import uuid from 'uuid';
 
-const ArgumentType = require('../extension-support/argument-type');
-const Blocks = require('./blocks');
-const BlocksRuntimeCache = require('./blocks-runtime-cache');
-const BlockType = require('../extension-support/block-type');
-const Profiler = require('./profiler');
-const Sequencer = require('./sequencer');
-const execute = require('./execute.js');
-const compilerExecute = require('../compiler/jsexecute');
-const ScratchBlocksConstants = require('./scratch-blocks-constants');
-const TargetType = require('../extension-support/target-type');
-const Thread = require('./thread');
-const log = require('../util/log');
-const maybeFormatMessage = require('../util/maybe-format-message');
-const StageLayering = require('./stage-layering');
-const Variable = require('./variable');
-const xmlEscape = require('../util/xml-escape');
-const ScratchLinkWebSocket = require('../util/scratch-link-websocket');
-const FontManager = require('./tw-font-manager');
-const fetchWithTimeout = require('../util/fetch-with-timeout');
-const platform = require('./tw-platform.js');
+import ArgumentType from '../extension-support/argument-type';
+import Blocks from './blocks';
+import BlocksRuntimeCache from './blocks-runtime-cache';
+import BlockType from '../extension-support/block-type';
+import Profiler from './profiler';
+import Sequencer from './sequencer';
+import execute from './execute.js';
+import compilerExecute from '../compiler/jsexecute';
+import ScratchBlocksConstants from './scratch-blocks-constants';
+import TargetType from '../extension-support/target-type';
+import Thread from './thread';
+import log from '../util/log';
+import maybeFormatMessage from '../util/maybe-format-message';
+import StageLayering from './stage-layering';
+import Variable from './variable';
+import xmlEscape from '../util/xml-escape';
+import ScratchLinkWebSocket from '../util/scratch-link-websocket';
+import FontManager from './tw-font-manager';
+import fetchWithTimeout from '../util/fetch-with-timeout';
+import platform from './tw-platform.js';
 
 // Virtual I/O devices.
-const Clock = require('../io/clock');
-const Cloud = require('../io/cloud');
-const Keyboard = require('../io/keyboard');
-const Mouse = require('../io/mouse');
-const MouseWheel = require('../io/mouseWheel');
-const UserData = require('../io/userData');
-const Video = require('../io/video');
+import Clock from '../io/clock';
+import Cloud from '../io/cloud';
+import Keyboard from '../io/keyboard';
+import Mouse from '../io/mouse';
+import MouseWheel from '../io/mouseWheel';
+import UserData from '../io/userData';
+import Video from '../io/video';
 
-const StringUtil = require('../util/string-util');
-const uid = require('../util/uid');
+import StringUtil from '../util/string-util';
+import uid from '../util/uid';
 
 const defaultBlockPackages = {
     scratch3_control: require('../blocks/scratch3_control'),
@@ -48,8 +48,8 @@ const defaultBlockPackages = {
     scratch3_procedures: require('../blocks/scratch3_procedures')
 };
 
-const interpolate = require('./tw-interpolate');
-const FrameLoop = require('./tw-frame-loop');
+import interpolate from './tw-interpolate';
+import FrameLoop from './tw-frame-loop';
 
 const defaultExtensionColors = ['#0FBD8C', '#0DA57A', '#0B8E69'];
 
@@ -204,6 +204,20 @@ let rendererDrawProfilerId = -1;
  * @constructor
  */
 class Runtime extends EventEmitter {
+    targets: any[];
+    executableTargets: any[];
+    threads: any[];
+    threadMap: Map<any, any>;
+    sequencer: Sequencer;
+    flyoutBlocks: Blocks;
+    monitorBlocks: Blocks;
+    private _editingTarget: null;
+    private _primitives: {};
+    private _blockInfo: any[];
+    private _hats: {};
+    private _flowing: {};
+    private _scriptGlowsPreviousFrame: any[];
+    private _lastStepDoneThreads: null;
     constructor () {
         super();
 
@@ -289,7 +303,7 @@ class Runtime extends EventEmitter {
          * Number of non-monitor threads running during the previous frame.
          * @type {number}
          */
-        this._nonMonitorThreadCount = 0;
+        this._getMonitorThreadCount = 0;
 
         /**
          * All threads that finished running and were removed from this.threads
@@ -534,6 +548,7 @@ class Runtime extends EventEmitter {
          * Total number of finished or errored scratch-storage load() requests since the runtime was created or cleared.
          */
         this.finishedAssetRequests = 0;
+        this.extensionManager = undefined;
     }
 
     /**

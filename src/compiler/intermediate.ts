@@ -6,7 +6,19 @@
  * An IntermediateScript describes a single script.
  * Scripts do not necessarily have hats.
  */
-class IntermediateScript {
+export class IntermediateScript {
+    topBlockId: null;
+    stack: null;
+    isProcedure: boolean;
+    procedureVariant: string;
+    procedureCode: string;
+    arguments: never[];
+    isWarp: boolean;
+    yields: boolean;
+    warpTimer: boolean;
+    dependedProcedures: never[];
+    cachedCompileResult: null;
+    executableHat: boolean;
     constructor () {
         /**
          * The ID of the top block of this script.
@@ -87,7 +99,10 @@ class IntermediateScript {
 /**
  * An IntermediateRepresentation contains scripts.
  */
-class IntermediateRepresentation {
+export class IntermediateRepresentation {
+    entry: null;
+    // deno-lint-ignore ban-types
+    procedures: {};
     constructor () {
         /**
          * The entry point of this IR.
@@ -102,8 +117,3 @@ class IntermediateRepresentation {
         this.procedures = {};
     }
 }
-
-module.exports = {
-    IntermediateScript,
-    IntermediateRepresentation
-};

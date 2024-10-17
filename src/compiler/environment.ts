@@ -4,7 +4,7 @@
  * @returns {boolean} true if the nullish coalescing operator (x ?? y) is supported.
  * See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing_operator
  */
-const supportsNullishCoalescing = () => {
+export const supportsNullishCoalescing = () => {
     try {
         // eslint-disable-next-line no-unused-vars
         const fn = new Function('undefined ?? 3');
@@ -13,8 +13,4 @@ const supportsNullishCoalescing = () => {
     } catch (e) {
         return false;
     }
-};
-
-module.exports = {
-    supportsNullishCoalescing: supportsNullishCoalescing()
 };

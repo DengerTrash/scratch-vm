@@ -1,6 +1,8 @@
-const Cast = require('../util/cast');
+import Cast from '../util/cast';
 
-class Scratch3ControlBlocks {
+export default class Scratch3ControlBlocks {
+    runtime: any;
+    private _counter: number;
     constructor (runtime) {
         /**
          * The runtime instantiating this block package.
@@ -202,5 +204,3 @@ class Scratch3ControlBlocks {
         util.startBranch(1, false);
     }
 }
-
-module.exports = Scratch3ControlBlocks;

@@ -1,5 +1,6 @@
-const fs = require('fs');
-const VirtualMachine = require('../index');
+import fs from 'node:fs';
+import process from "node:process";
+import VirtualMachine from "../index.ts";
 
 /* eslint-env node */
 /* eslint-disable no-console */

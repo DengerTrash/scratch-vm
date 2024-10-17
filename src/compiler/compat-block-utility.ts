@@ -1,6 +1,8 @@
-const BlockUtility = require('../engine/block-utility');
+import BlockUtility from '../engine/block-utility.ts';
 
-class CompatibilityLayerBlockUtility extends BlockUtility {
+export default class CompatibilityLayerBlockUtility extends BlockUtility {
+    thread: any;
+    sequencer: any;
     constructor () {
         super();
         this._startedBranch = null;
@@ -39,4 +41,3 @@ class CompatibilityLayerBlockUtility extends BlockUtility {
 }
 
 // Export a single instance to be reused.
-module.exports = new CompatibilityLayerBlockUtility();
